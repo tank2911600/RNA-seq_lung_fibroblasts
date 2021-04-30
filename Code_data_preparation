@@ -1,0 +1,962 @@
+Code for the RNA-seq analysis of IPF fibroblasts and control lung fibroblasts
+
+zhenjun@MDHS-NIX-029[zhenjun] cd /data2/zhenjun/lung_apex_base/Rawdata
+zhenjun@MDHS-NIX-029[Rawdata] cat 009C_HKH33DRXX_CCGCGGTT-AGCGCTAG_L001_R1.fastq.gz 009C_HKH33DRXX_CCGCGGTT-AGCGCTAG_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_1.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 009D_HKH33DRXX_TTATAACC-GATATCGA_L001_R1.fastq.gz 009D_HKH33DRXX_TTATAACC-GATATCGA_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_1.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 013A_HKH33DRXX_GGACTTGG-CGCAGACG_L001_R1.fastq.gz 013A_HKH33DRXX_GGACTTGG-CGCAGACG_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_2.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 013B_HKH33DRXX_AAGTCCAA-TATGAGTA_L001_R1.fastq.gz 013B_HKH33DRXX_AAGTCCAA-TATGAGTA_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_2.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 018C_HKH33DRXX_ATCCACTG-AGGTGCGT_L001_R1.fastq.gz 018C_HKH33DRXX_ATCCACTG-AGGTGCGT_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_1.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 018D_HKH33DRXX_GCTTGTCA-GAACATAC_L001_R1.fastq.gz 018D_HKH33DRXX_GCTTGTCA-GAACATAC_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_1.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 023A_HKH33DRXX_CAAGCTAG-ACATAGCG_L001_R1.fastq.gz 023A_HKH33DRXX_CAAGCTAG-ACATAGCG_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_2.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 023B_HKH33DRXX_TGGATCGA-GTGCGATA_L001_R1.fastq.gz 023B_HKH33DRXX_TGGATCGA-GTGCGATA_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_2.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 024A_HKH33DRXX_AGTTCAGG-CCAACAGA_L001_R1.fastq.gz 024A_HKH33DRXX_AGTTCAGG-CCAACAGA_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_3.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 024B_HKH33DRXX_GACCTGAA-TTGGTGAG_L001_R1.fastq.gz 024B_HKH33DRXX_GACCTGAA-TTGGTGAG_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_3.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 027C_HKH33DRXX_TCTCTACT-CGCGGTTC_L001_R1.fastq.gz 027C_HKH33DRXX_TCTCTACT-CGCGGTTC_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_3.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 027D_HKH33DRXX_CTCTCGTC-TATAACCT_L001_R1.fastq.gz 027D_HKH33DRXX_CTCTCGTC-TATAACCT_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_3.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 028B_HKH33DRXX_CCAAGTCT-AAGGATGA_L001_R1.fastq.gz 028B_HKH33DRXX_CCAAGTCT-AAGGATGA_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_4.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 028C_HKH33DRXX_TTGGACTC-GGAAGCAG_L001_R1.fastq.gz 028C_HKH33DRXX_TTGGACTC-GGAAGCAG_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_4.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 029A_HKH33DRXX_GGCTTAAG-TCGTGACC_L001_R1.fastq.gz 029A_HKH33DRXX_GGCTTAAG-TCGTGACC_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_5.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 029B_HKH33DRXX_AATCCGGA-CTACAGTT_L001_R1.fastq.gz 029B_HKH33DRXX_AATCCGGA-CTACAGTT_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_5.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 030C_HKH33DRXX_TAATACAG-ATATTCAC_L001_R1.fastq.gz 030C_HKH33DRXX_TAATACAG-ATATTCAC_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_4.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 030D_HKH33DRXX_CGGCGTGA-GCGCCTGT_L001_R1.fastq.gz 030D_HKH33DRXX_CGGCGTGA-GCGCCTGT_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_4.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 043C_HKH33DRXX_ATGTAAGT-ACTCTATG_L001_R1.fastq.gz 043C_HKH33DRXX_ATGTAAGT-ACTCTATG_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_6.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 043D_HKH33DRXX_GCACGGAC-GTCTCGCA_L001_R1.fastq.gz 043D_HKH33DRXX_GCACGGAC-GTCTCGCA_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_6.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 052A_HKH33DRXX_GGTACCTT-AAGACGTC_L001_R1.fastq.gz 052A_HKH33DRXX_GGTACCTT-AAGACGTC_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_5.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 052B_HKH33DRXX_AACGTTCC-GGAGTACT_L001_R1.fastq.gz 052B_HKH33DRXX_AACGTTCC-GGAGTACT_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_5.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 053A_HKH33DRXX_GCAGAATT-ACCGGCCA_L001_R1.fastq.gz 053A_HKH33DRXX_GCAGAATT-ACCGGCCA_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_6.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cat 053B_HKH33DRXX_ATGAGGCC-GTTAATTG_L001_R1.fastq.gz 053B_HKH33DRXX_ATGAGGCC-GTTAATTG_L002_R1.fastq.gz > /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_6.fastq.gz
+zhenjun@MDHS-NIX-029[Rawdata] cd /data2/zhenjun                       [ 2:39PM]
+zhenjun@MDHS-NIX-029[zhenjun] chmod a+x ./fastp                       [ 2:51PM]
+zhenjun@MDHS-NIX-029[zhenjun] for ((i=1;i<=6;i++));do ./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_${i}.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_${i}_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_${i}.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_${i}.json;done
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 40101192
+total bases: 4010119200
+Q20 bases: 3955229816(98.6312%)
+Q30 bases: 3834439408(95.6191%)
+
+Read1 after filtering:
+total reads: 40060819
+total bases: 3376107026
+Q20 bases: 3328973225(98.6039%)
+Q30 bases: 3223434088(95.4778%)
+
+Filtering result:
+reads passed filter: 40060819
+reads failed due to low quality: 37596
+reads failed due to too many N: 1102
+reads failed due to too short: 1675
+reads with adapter trimmed: 1969139
+bases trimmed due to adapters: 29021584
+
+Duplication rate (may be overestimated since this is SE data): 42.835%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_1.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_1.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_1.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_1_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_1.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_1.json 
+fastp v0.20.0, time used: 177 seconds
+Detecting adapter sequence for read1...
+No adapter detected for read1
+
+Read1 before filtering:
+total reads: 35148731
+total bases: 3514873100
+Q20 bases: 3464255111(98.5599%)
+Q30 bases: 3354106886(95.4261%)
+
+Read1 after filtering:
+total reads: 35116182
+total bases: 2984743479
+Q20 bases: 2940748902(98.526%)
+Q30 bases: 2843801515(95.2779%)
+
+Filtering result:
+reads passed filter: 35116182
+reads failed due to low quality: 31315
+reads failed due to too many N: 894
+reads failed due to too short: 340
+reads with adapter trimmed: 0
+bases trimmed due to adapters: 0
+
+Duplication rate (may be overestimated since this is SE data): 43.323%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_2.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_2.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_2.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_2_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_2.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_2.json 
+fastp v0.20.0, time used: 162 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 34751437
+total bases: 3475143700
+Q20 bases: 3424762927(98.5503%)
+Q30 bases: 3315716875(95.4124%)
+
+Read1 after filtering:
+total reads: 34717523
+total bases: 2930240095
+Q20 bases: 2886988944(98.524%)
+Q30 bases: 2791804427(95.2756%)
+
+Filtering result:
+reads passed filter: 34717523
+reads failed due to low quality: 31770
+reads failed due to too many N: 894
+reads failed due to too short: 1250
+reads with adapter trimmed: 1402118
+bases trimmed due to adapters: 20703849
+
+Duplication rate (may be overestimated since this is SE data): 42.5842%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_3.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_3.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_3.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_3_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_3.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_3.json 
+fastp v0.20.0, time used: 159 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 35260821
+total bases: 3526082100
+Q20 bases: 3478259387(98.6437%)
+Q30 bases: 3373088177(95.6611%)
+
+Read1 after filtering:
+total reads: 35225290
+total bases: 2977447640
+Q20 bases: 2936314157(98.6185%)
+Q30 bases: 2844220935(95.5255%)
+
+Filtering result:
+reads passed filter: 35225290
+reads failed due to low quality: 33579
+reads failed due to too many N: 852
+reads failed due to too short: 1100
+reads with adapter trimmed: 1134213
+bases trimmed due to adapters: 16602116
+
+Duplication rate (may be overestimated since this is SE data): 41.4766%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_4.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_4.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_4.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_4_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_4.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_4.json 
+fastp v0.20.0, time used: 162 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 44697706
+total bases: 4469770600
+Q20 bases: 4411148122(98.6885%)
+Q30 bases: 4279298631(95.7387%)
+
+Read1 after filtering:
+total reads: 44663481
+total bases: 3774405605
+Q20 bases: 3723620184(98.6545%)
+Q30 bases: 3608153216(95.5953%)
+
+Filtering result:
+reads passed filter: 44663481
+reads failed due to low quality: 31905
+reads failed due to too many N: 1120
+reads failed due to too short: 1200
+reads with adapter trimmed: 1498839
+bases trimmed due to adapters: 21829286
+
+Duplication rate (may be overestimated since this is SE data): 46.0779%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_5.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_5.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_5.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_5_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_5.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_5.json 
+fastp v0.20.0, time used: 207 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 37348475
+total bases: 3734847500
+Q20 bases: 3684335047(98.6475%)
+Q30 bases: 3573826120(95.6887%)
+
+Read1 after filtering:
+total reads: 37311669
+total bases: 3150451406
+Q20 bases: 3107100816(98.624%)
+Q30 bases: 3010662536(95.5629%)
+
+Filtering result:
+reads passed filter: 37311669
+reads failed due to low quality: 34607
+reads failed due to too many N: 998
+reads failed due to too short: 1201
+reads with adapter trimmed: 1401431
+bases trimmed due to adapters: 20675628
+
+Duplication rate (may be overestimated since this is SE data): 43.9852%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_6.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_6.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Apex_6.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_6_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_6.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_6.json 
+fastp v0.20.0, time used: 176 seconds
+zhenjun@MDHS-NIX-029[zhenjun] for ((i=1;i<=6;i++));do ./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_${i}.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_${i}_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_${i}.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_${i}.json;done
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 53360733
+total bases: 5336073300
+Q20 bases: 5263078736(98.6321%)
+Q30 bases: 5103934931(95.6496%)
+
+Read1 after filtering:
+total reads: 53306804
+total bases: 4480165924
+Q20 bases: 4417626987(98.6041%)
+Q30 bases: 4278977832(95.5094%)
+
+Filtering result:
+reads passed filter: 53306804
+reads failed due to low quality: 50319
+reads failed due to too many N: 1368
+reads failed due to too short: 2242
+reads with adapter trimmed: 3323136
+bases trimmed due to adapters: 50838993
+
+Duplication rate (may be overestimated since this is SE data): 41.8277%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_1.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_1.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_1.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_1_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_1.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_1.json 
+fastp v0.20.0, time used: 251 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 37554323
+total bases: 3755432300
+Q20 bases: 3706104189(98.6865%)
+Q30 bases: 3595032245(95.7289%)
+
+Read1 after filtering:
+total reads: 37523802
+total bases: 3159238851
+Q20 bases: 3116698393(98.6535%)
+Q30 bases: 3019671151(95.5822%)
+
+Filtering result:
+reads passed filter: 37523802
+reads failed due to low quality: 28374
+reads failed due to too many N: 908
+reads failed due to too short: 1239
+reads with adapter trimmed: 2016233
+bases trimmed due to adapters: 30237102
+
+Duplication rate (may be overestimated since this is SE data): 42.4678%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_2.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_2.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_2.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_2_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_2.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_2.json 
+fastp v0.20.0, time used: 181 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 34623301
+total bases: 3462330100
+Q20 bases: 3413933678(98.6022%)
+Q30 bases: 3307569701(95.5302%)
+
+Read1 after filtering:
+total reads: 34591940
+total bases: 2923349578
+Q20 bases: 2881498887(98.5684%)
+Q30 bases: 2788315706(95.3809%)
+
+Filtering result:
+reads passed filter: 34591940
+reads failed due to low quality: 29789
+reads failed due to too many N: 758
+reads failed due to too short: 814
+reads with adapter trimmed: 1197044
+bases trimmed due to adapters: 16895678
+
+Duplication rate (may be overestimated since this is SE data): 44.3055%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_3.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_3.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_3.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_3_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_3.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_3.json 
+fastp v0.20.0, time used: 168 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 33133485
+total bases: 3313348500
+Q20 bases: 3267560607(98.6181%)
+Q30 bases: 3166128679(95.5568%)
+
+Read1 after filtering:
+total reads: 33104500
+total bases: 2799015996
+Q20 bases: 2759461855(98.5869%)
+Q30 bases: 2670687210(95.4152%)
+
+Filtering result:
+reads passed filter: 33104500
+reads failed due to low quality: 27394
+reads failed due to too many N: 826
+reads failed due to too short: 765
+reads with adapter trimmed: 1046547
+bases trimmed due to adapters: 14774813
+
+Duplication rate (may be overestimated since this is SE data): 43.1251%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_4.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_4.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_4.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_4_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_4.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_4.json 
+fastp v0.20.0, time used: 162 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 32193288
+total bases: 3219328800
+Q20 bases: 3175810858(98.6482%)
+Q30 bases: 3079350081(95.6519%)
+
+Read1 after filtering:
+total reads: 32164812
+total bases: 2717668691
+Q20 bases: 2680096395(98.6175%)
+Q30 bases: 2595564417(95.507%)
+
+Filtering result:
+reads passed filter: 32164812
+reads failed due to low quality: 26771
+reads failed due to too many N: 875
+reads failed due to too short: 830
+reads with adapter trimmed: 1103967
+bases trimmed due to adapters: 16164042
+
+Duplication rate (may be overestimated since this is SE data): 44.0381%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_5.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_5.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_5.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_5_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_5.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_5.json 
+fastp v0.20.0, time used: 156 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 32663565
+total bases: 3266356500
+Q20 bases: 3221977544(98.6413%)
+Q30 bases: 3123623829(95.6302%)
+
+Read1 after filtering:
+total reads: 32635443
+total bases: 2754828677
+Q20 bases: 2716484300(98.6081%)
+Q30 bases: 2630391909(95.483%)
+
+Filtering result:
+reads passed filter: 32635443
+reads failed due to low quality: 26444
+reads failed due to too many N: 886
+reads failed due to too short: 792
+reads with adapter trimmed: 1306996
+bases trimmed due to adapters: 18980485
+
+Duplication rate (may be overestimated since this is SE data): 43.8242%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_6.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_6.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/CTR_Base_6.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_6_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_6.html -j /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_6.json 
+fastp v0.20.0, time used: 141 seconds
+zhenjun@MDHS-NIX-029[zhenjun] for ((i=1;i<=6;i++));do ./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_${i}.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_${i}_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_${i}.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_${i}.json;done
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 39785086
+total bases: 3978508600
+Q20 bases: 3925426067(98.6658%)
+Q30 bases: 3805901398(95.6615%)
+
+Read1 after filtering:
+total reads: 39753954
+total bases: 3352201048
+Q20 bases: 3306255118(98.6294%)
+Q30 bases: 3201688911(95.5101%)
+
+Filtering result:
+reads passed filter: 39753954
+reads failed due to low quality: 28712
+reads failed due to too many N: 1061
+reads failed due to too short: 1359
+reads with adapter trimmed: 1847140
+bases trimmed due to adapters: 26843982
+
+Duplication rate (may be overestimated since this is SE data): 43.919%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_1.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_1.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_1.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_1_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_1.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_1.json 
+fastp v0.20.0, time used: 173 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 34185942
+total bases: 3418594200
+Q20 bases: 3372535623(98.6527%)
+Q30 bases: 3269494400(95.6386%)
+
+Read1 after filtering:
+total reads: 34154148
+total bases: 2879883515
+Q20 bases: 2840263593(98.6243%)
+Q30 bases: 2750279749(95.4997%)
+
+Filtering result:
+reads passed filter: 34154148
+reads failed due to low quality: 29445
+reads failed due to too many N: 946
+reads failed due to too short: 1403
+reads with adapter trimmed: 1552933
+bases trimmed due to adapters: 23190966
+
+Duplication rate (may be overestimated since this is SE data): 38.0215%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_2.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_2.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_2.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_2_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_2.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_2.json 
+fastp v0.20.0, time used: 147 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 32044513
+total bases: 3204451300
+Q20 bases: 3158440638(98.5642%)
+Q30 bases: 3059512289(95.4769%)
+
+Read1 after filtering:
+total reads: 32010237
+total bases: 2698630271
+Q20 bases: 2659155703(98.5372%)
+Q30 bases: 2572876149(95.3401%)
+
+Filtering result:
+reads passed filter: 32010237
+reads failed due to low quality: 32184
+reads failed due to too many N: 893
+reads failed due to too short: 1199
+reads with adapter trimmed: 1483345
+bases trimmed due to adapters: 22056062
+
+Duplication rate (may be overestimated since this is SE data): 42.878%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_3.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_3.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_3.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_3_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_3.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_3.json 
+fastp v0.20.0, time used: 138 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 35099252
+total bases: 3509925200
+Q20 bases: 3464054648(98.6931%)
+Q30 bases: 3361729367(95.7778%)
+
+Read1 after filtering:
+total reads: 35069461
+total bases: 2957310235
+Q20 bases: 2917743639(98.6621%)
+Q30 bases: 2828250393(95.6359%)
+
+Filtering result:
+reads passed filter: 35069461
+reads failed due to low quality: 27937
+reads failed due to too many N: 877
+reads failed due to too short: 977
+reads with adapter trimmed: 1606066
+bases trimmed due to adapters: 23397388
+
+Duplication rate (may be overestimated since this is SE data): 43.8204%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_4.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_4.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_4.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_4_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_4.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_4.json 
+fastp v0.20.0, time used: 149 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 27627767
+total bases: 2762776700
+Q20 bases: 2724067507(98.5989%)
+Q30 bases: 2640607528(95.578%)
+
+Read1 after filtering:
+total reads: 27599098
+total bases: 2329510907
+Q20 bases: 2296273648(98.5732%)
+Q30 bases: 2223333958(95.4421%)
+
+Filtering result:
+reads passed filter: 27599098
+reads failed due to low quality: 27265
+reads failed due to too many N: 735
+reads failed due to too short: 669
+reads with adapter trimmed: 1114677
+bases trimmed due to adapters: 16185973
+
+Duplication rate (may be overestimated since this is SE data): 43.635%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_5.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_5.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_5.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_5_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_5.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_5.json 
+fastp v0.20.0, time used: 119 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 40647457
+total bases: 4064745700
+Q20 bases: 4011690337(98.6947%)
+Q30 bases: 3893055423(95.7761%)
+
+Read1 after filtering:
+total reads: 40611130
+total bases: 3429116802
+Q20 bases: 3383374921(98.6661%)
+Q30 bases: 3279427282(95.6348%)
+
+Filtering result:
+reads passed filter: 40611130
+reads failed due to low quality: 34143
+reads failed due to too many N: 1128
+reads failed due to too short: 1056
+reads with adapter trimmed: 1568215
+bases trimmed due to adapters: 22734097
+
+Duplication rate (may be overestimated since this is SE data): 44.8491%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_6.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_6.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Apex_6.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_6_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_6.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_6.json 
+fastp v0.20.0, time used: 175 seconds
+zhenjun@MDHS-NIX-029[zhenjun] for ((i=1;i<=6;i++));do ./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_${i}.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_${i}_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_${i}.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_${i}.json;done
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 38799709
+total bases: 3879970900
+Q20 bases: 3828297050(98.6682%)
+Q30 bases: 3713496364(95.7094%)
+
+Read1 after filtering:
+total reads: 38764639
+total bases: 3266552682
+Q20 bases: 3221995157(98.6359%)
+Q30 bases: 3121582225(95.562%)
+
+Filtering result:
+reads passed filter: 38764639
+reads failed due to low quality: 32341
+reads failed due to too many N: 1051
+reads failed due to too short: 1678
+reads with adapter trimmed: 1936397
+bases trimmed due to adapters: 28400489
+
+Duplication rate (may be overestimated since this is SE data): 42.2606%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_1.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_1.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_1.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_1_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_1.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_1.json 
+fastp v0.20.0, time used: 168 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 27636327
+total bases: 2763632700
+Q20 bases: 2725381798(98.6159%)
+Q30 bases: 2639964258(95.5251%)
+
+Read1 after filtering:
+total reads: 27612946
+total bases: 2330245457
+Q20 bases: 2297217645(98.5826%)
+Q30 bases: 2222452339(95.3742%)
+
+Filtering result:
+reads passed filter: 27612946
+reads failed due to low quality: 21662
+reads failed due to too many N: 704
+reads failed due to too short: 1015
+reads with adapter trimmed: 1161329
+bases trimmed due to adapters: 16836786
+
+Duplication rate (may be overestimated since this is SE data): 38.699%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_2.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_2.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_2.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_2_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_2.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_2.json 
+fastp v0.20.0, time used: 126 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 35281457
+total bases: 3528145700
+Q20 bases: 3481563566(98.6797%)
+Q30 bases: 3376661602(95.7064%)
+
+Read1 after filtering:
+total reads: 35250431
+total bases: 2977159997
+Q20 bases: 2936850987(98.6461%)
+Q30 bases: 2844751346(95.5525%)
+
+Filtering result:
+reads passed filter: 35250431
+reads failed due to low quality: 29069
+reads failed due to too many N: 961
+reads failed due to too short: 996
+reads with adapter trimmed: 1319592
+bases trimmed due to adapters: 19071862
+
+Duplication rate (may be overestimated since this is SE data): 44.8399%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_3.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_3.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_3.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_3_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_3.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_3.json 
+fastp v0.20.0, time used: 155 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 35090377
+total bases: 3509037700
+Q20 bases: 3461220310(98.6373%)
+Q30 bases: 3354272923(95.5895%)
+
+Read1 after filtering:
+total reads: 35061310
+total bases: 2962237022
+Q20 bases: 2920820656(98.6019%)
+Q30 bases: 2827046631(95.4362%)
+
+Filtering result:
+reads passed filter: 35061310
+reads failed due to low quality: 27288
+reads failed due to too many N: 839
+reads failed due to too short: 940
+reads with adapter trimmed: 1244056
+bases trimmed due to adapters: 17863171
+
+Duplication rate (may be overestimated since this is SE data): 43.7286%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_4.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_4.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_4.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_4_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_4.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_4.json 
+fastp v0.20.0, time used: 156 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 34624710
+total bases: 3462471000
+Q20 bases: 3415699446(98.6492%)
+Q30 bases: 3312651385(95.673%)
+
+Read1 after filtering:
+total reads: 34591305
+total bases: 2920386169
+Q20 bases: 2880213466(98.6244%)
+Q30 bases: 2790143834(95.5402%)
+
+Filtering result:
+reads passed filter: 34591305
+reads failed due to low quality: 31381
+reads failed due to too many N: 936
+reads failed due to too short: 1088
+reads with adapter trimmed: 1350816
+bases trimmed due to adapters: 19750211
+
+Duplication rate (may be overestimated since this is SE data): 44.3293%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_5.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_5.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_5.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_5_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_5.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_5.json 
+fastp v0.20.0, time used: 153 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read1 before filtering:
+total reads: 34614436
+total bases: 3461443600
+Q20 bases: 3415117685(98.6617%)
+Q30 bases: 3311871212(95.6789%)
+
+Read1 after filtering:
+total reads: 34584032
+total bases: 2923922785
+Q20 bases: 2883898932(98.6312%)
+Q30 bases: 2793417456(95.5366%)
+
+Filtering result:
+reads passed filter: 34584032
+reads failed due to low quality: 28634
+reads failed due to too many N: 914
+reads failed due to too short: 856
+reads with adapter trimmed: 1085184
+bases trimmed due to adapters: 15642038
+
+Duplication rate (may be overestimated since this is SE data): 44.7048%
+
+JSON report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_6.json
+HTML report: /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_6.html
+
+./fastp -i /data2/zhenjun/lung_apex_base/Fastq_files/IPF_Base_6.fastq.gz -o /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_6_trim.fastq.gz -f 15 -h /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_6.html -j /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_6.json 
+fastp v0.20.0, time used: 153 seconds
+zhenjun@MDHS-NIX-029[zhenjun] cd /data2/software/STAR/bin/Linux_x86_64
+zhenjun@MDHS-NIX-029[Linux_x86_64] for ((i=1;i<=6;i++));do ./STAR --genomeDir /data2/zhenjun/index_GRCh38.100 --runThreadN 10 --readFilesIn /data2/zhenjun/lung_apex_base/Fastp/CTR_Apex_${i}_trim.fastq.gz --readFilesCommand zcat --outFileNamePrefix /data2/zhenjun/lung_apex_base/STAR_aligner/CTR_Apex_${i};done
+Mar 13 16:14:08 ..... started STAR run
+Mar 13 16:14:08 ..... loading genome
+Mar 13 16:15:43 ..... started mapping
+Mar 13 16:18:21 ..... finished mapping
+Mar 13 16:18:25 ..... finished successfully
+Mar 13 16:18:25 ..... started STAR run
+Mar 13 16:18:25 ..... loading genome
+Mar 13 16:19:10 ..... started mapping
+Mar 13 16:21:21 ..... finished mapping
+Mar 13 16:21:23 ..... finished successfully
+Mar 13 16:21:23 ..... started STAR run
+Mar 13 16:21:23 ..... loading genome
+Mar 13 16:21:45 ..... started mapping
+Mar 13 16:23:53 ..... finished mapping
+Mar 13 16:23:54 ..... finished successfully
+Mar 13 16:23:54 ..... started STAR run
+Mar 13 16:23:54 ..... loading genome
+Mar 13 16:24:11 ..... started mapping
+Mar 13 16:26:17 ..... finished mapping
+Mar 13 16:26:19 ..... finished successfully
+Mar 13 16:26:19 ..... started STAR run
+Mar 13 16:26:19 ..... loading genome
+Mar 13 16:26:39 ..... started mapping
+Mar 13 16:29:11 ..... finished mapping
+Mar 13 16:29:12 ..... finished successfully
+Mar 13 16:29:12 ..... started STAR run
+Mar 13 16:29:12 ..... loading genome
+Mar 13 16:29:27 ..... started mapping
+Mar 13 16:31:28 ..... finished mapping
+Mar 13 16:31:29 ..... finished successfully
+zhenjun@MDHS-NIX-029[Linux_x86_64] for ((i=1;i<=6;i++));do ./STAR --genomeDir /data2/zhenjun/index_GRCh38.100 --runThreadN 10 --readFilesIn /data2/zhenjun/lung_apex_base/Fastp/CTR_Base_${i}_trim.fastq.gz --readFilesCommand zcat --outFileNamePrefix /data2/zhenjun/lung_apex_base/STAR_aligner/CTR_Base_${i};done
+Mar 13 16:31:29 ..... started STAR run
+Mar 13 16:31:29 ..... loading genome
+Mar 13 16:31:45 ..... started mapping
+Mar 13 16:34:35 ..... finished mapping
+Mar 13 16:34:36 ..... finished successfully
+Mar 13 16:34:37 ..... started STAR run
+Mar 13 16:34:37 ..... loading genome
+Mar 13 16:34:53 ..... started mapping
+Mar 13 16:36:54 ..... finished mapping
+Mar 13 16:36:55 ..... finished successfully
+Mar 13 16:36:55 ..... started STAR run
+Mar 13 16:36:55 ..... loading genome
+Mar 13 16:37:14 ..... started mapping
+Mar 13 16:39:06 ..... finished mapping
+Mar 13 16:39:07 ..... finished successfully
+Mar 13 16:39:07 ..... started STAR run
+Mar 13 16:39:07 ..... loading genome
+Mar 13 16:39:23 ..... started mapping
+Mar 13 16:41:11 ..... finished mapping
+Mar 13 16:41:12 ..... finished successfully
+Mar 13 16:41:12 ..... started STAR run
+Mar 13 16:41:12 ..... loading genome
+Mar 13 16:41:29 ..... started mapping
+Mar 13 16:43:14 ..... finished mapping
+Mar 13 16:43:15 ..... finished successfully
+Mar 13 16:43:15 ..... started STAR run
+Mar 13 16:43:15 ..... loading genome
+Mar 13 16:43:31 ..... started mapping
+Mar 13 16:45:23 ..... finished mapping
+Mar 13 16:45:24 ..... finished successfully
+zhenjun@MDHS-NIX-029[Linux_x86_64] for ((i=1;i<=6;i++));do ./STAR --genomeDir /data2/zhenjun/index_GRCh38.100 --runThreadN 10 --readFilesIn /data2/zhenjun/lung_apex_base/Fastp/IPF_Apex_${i}_trim.fastq.gz --readFilesCommand zcat --outFileNamePrefix /data2/zhenjun/lung_apex_base/STAR_aligner/IPF_Apex_${i};done
+Mar 13 16:45:24 ..... started STAR run
+Mar 13 16:45:24 ..... loading genome
+Mar 13 16:45:40 ..... started mapping
+Mar 13 16:47:49 ..... finished mapping
+Mar 13 16:47:50 ..... finished successfully
+Mar 13 16:47:50 ..... started STAR run
+Mar 13 16:47:50 ..... loading genome
+Mar 13 16:48:06 ..... started mapping
+Mar 13 16:49:54 ..... finished mapping
+Mar 13 16:49:55 ..... finished successfully
+Mar 13 16:49:55 ..... started STAR run
+Mar 13 16:49:55 ..... loading genome
+Mar 13 16:50:09 ..... started mapping
+Mar 13 16:51:53 ..... finished mapping
+Mar 13 16:51:54 ..... finished successfully
+Mar 13 16:51:54 ..... started STAR run
+Mar 13 16:51:54 ..... loading genome
+Mar 13 16:52:11 ..... started mapping
+Mar 13 16:54:04 ..... finished mapping
+Mar 13 16:54:05 ..... finished successfully
+Mar 13 16:54:05 ..... started STAR run
+Mar 13 16:54:05 ..... loading genome
+Mar 13 16:54:21 ..... started mapping
+Mar 13 16:55:48 ..... finished mapping
+Mar 13 16:55:49 ..... finished successfully
+Mar 13 16:55:49 ..... started STAR run
+Mar 13 16:55:49 ..... loading genome
+Mar 13 16:56:03 ..... started mapping
+Mar 13 16:58:08 ..... finished mapping
+Mar 13 16:58:09 ..... finished successfully
+zhenjun@MDHS-NIX-029[Linux_x86_64] for ((i=1;i<=6;i++));do ./STAR --genomeDir /data2/zhenjun/index_GRCh38.100 --runThreadN 10 --readFilesIn /data2/zhenjun/lung_apex_base/Fastp/IPF_Base_${i}_trim.fastq.gz --readFilesCommand zcat --outFileNamePrefix /data2/zhenjun/lung_apex_base/STAR_aligner/IPF_Base_${i};done
+Mar 13 16:59:21 ..... started STAR run
+Mar 13 16:59:21 ..... loading genome
+Mar 13 16:59:38 ..... started mapping
+Mar 13 17:01:40 ..... finished mapping
+Mar 13 17:01:40 ..... finished successfully
+Mar 13 17:01:40 ..... started STAR run
+Mar 13 17:01:40 ..... loading genome
+Mar 13 17:01:57 ..... started mapping
+Mar 13 17:03:26 ..... finished mapping
+Mar 13 17:03:27 ..... finished successfully
+Mar 13 17:03:27 ..... started STAR run
+Mar 13 17:03:27 ..... loading genome
+Mar 13 17:03:42 ..... started mapping
+Mar 13 17:05:33 ..... finished mapping
+Mar 13 17:05:34 ..... finished successfully
+Mar 13 17:05:34 ..... started STAR run
+Mar 13 17:05:34 ..... loading genome
+Mar 13 17:05:51 ..... started mapping
+Mar 13 17:07:42 ..... finished mapping
+Mar 13 17:07:43 ..... finished successfully
+Mar 13 17:07:43 ..... started STAR run
+Mar 13 17:07:43 ..... loading genome
+Mar 13 17:07:56 ..... started mapping
+Mar 13 17:09:56 ..... finished mapping
+Mar 13 17:09:57 ..... finished successfully
+Mar 13 17:09:57 ..... started STAR run
+Mar 13 17:09:57 ..... loading genome
+Mar 13 17:10:14 ..... started mapping
+Mar 13 17:12:07 ..... finished mapping
+Mar 13 17:12:07 ..... finished successfully
+zhenjun@MDHS-NIX-029[Linux_x86_64] cd /data2/software/samtools        [ 5:12PM]
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools view -bS /data2/zhenjun/lung_apex_base/STAR_aligner/CTR_Apex_${i}Aligned.out.sam -o /data2/zhenjun/lung_apex_base/Samtools/bam/CTR_Apex_${i}.bam;done
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools sort /data2/zhenjun/lung_apex_base/Samtools/bam/CTR_Apex_${i}.bam /data2/zhenjun/lung_apex_base/Samtools/sorted/CTR_Apex_${i}_sorted;done
+[bam_sort_core] merging from 20 files...
+[bam_sort_core] merging from 17 files...
+[bam_sort_core] merging from 17 files...
+[bam_sort_core] merging from 17 files...
+[bam_sort_core] merging from 22 files...
+[bam_sort_core] merging from 18 files...
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools index /data2/zhenjun/lung_apex_base/Samtools/sorted/CTR_Apex_${i}_sorted.bam;done
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools view -bS /data2/zhenjun/lung_apex_base/STAR_aligner/CTR_Base_${i}Aligned.out.sam -o /data2/zhenjun/lung_apex_base/Samtools/bam/CTR_Base_${i}.bam;done
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools sort /data2/zhenjun/lung_apex_base/Samtools/bam/CTR_Base_${i}.bam /data2/zhenjun/lung_apex_base/Samtools/sorted/CTR_Base_${i}_sorted;done
+[bam_sort_core] merging from 25 files...
+[bam_sort_core] merging from 18 files...
+[bam_sort_core] merging from 16 files...
+[bam_sort_core] merging from 16 files...
+[bam_sort_core] merging from 16 files...
+[bam_sort_core] merging from 16 files...
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools index /data2/zhenjun/lung_apex_base/Samtools/sorted/CTR_Base_${i}_sorted.bam;done
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools view -bS /data2/zhenjun/lung_apex_base/STAR_aligner/IPF_Apex_${i}Aligned.out.sam -o /data2/zhenjun/lung_apex_base/Samtools/bam/IPF_Apex_${i}.bam;done
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools sort /data2/zhenjun/lung_apex_base/Samtools/bam/IPF_Apex_${i}.bam /data2/zhenjun/lung_apex_base/Samtools/sorted/IPF_Apex_${i}_sorted;done
+[bam_sort_core] merging from 19 files...
+[bam_sort_core] merging from 16 files...
+[bam_sort_core] merging from 15 files...
+[bam_sort_core] merging from 17 files...
+[bam_sort_core] merging from 14 files...
+[bam_sort_core] merging from 20 files...
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools index /data2/zhenjun/lung_apex_base/Samtools/sorted/IPF_Apex_${i}_sorted.bam;done
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools view -bS /data2/zhenjun/lung_apex_base/STAR_aligner/IPF_Base_${i}Aligned.out.sam -o /data2/zhenjun/lung_apex_base/Samtools/bam/IPF_Base_${i}.bam;done
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+[samopen] SAM header is present: 194 sequences.
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools sort /data2/zhenjun/lung_apex_base/Samtools/bam/IPF_Base_${i}.bam /data2/zhenjun/lung_apex_base/Samtools/sorted/IPF_Base_${i}_sorted;done
+[bam_sort_core] merging from 19 files...
+[bam_sort_core] merging from 13 files...
+[bam_sort_core] merging from 17 files...
+[bam_sort_core] merging from 17 files...
+[bam_sort_core] merging from 17 files...
+[bam_sort_core] merging from 17 files...
+zhenjun@MDHS-NIX-029[samtools] for ((i=1;i<=6;i++));do samtools index /data2/zhenjun/lung_apex_base/Samtools/sorted/IPF_Base_${i}_sorted.bam;done
