@@ -1,0 +1,602 @@
+> indir <- file.path("/data2/zhenjun/lung_apex_base/Samtools/sorted")
+> list.files(indir) 
+ [1] "CTR_Apex_1_sorted.bam"       "CTR_Apex_1_sorted.bam.bai"  
+ [3] "CTR_Apex_2_sorted.bam"       "CTR_Apex_2_sorted.bam.bai"  
+ [5] "CTR_Apex_3_sorted.bam"       "CTR_Apex_3_sorted.bam.bai"  
+ [7] "CTR_Apex_4_sorted.bam"       "CTR_Apex_4_sorted.bam.bai"  
+ [9] "CTR_Apex_5_sorted.bam"       "CTR_Apex_5_sorted.bam.bai"  
+[11] "CTR_Apex_6_sorted.bam"       "CTR_Apex_6_sorted.bam.bai"  
+[13] "CTR_Base_1_sorted.bam"       "CTR_Base_1_sorted.bam.bai"  
+[15] "CTR_Base_2_sorted.bam"       "CTR_Base_2_sorted.bam.bai"  
+[17] "CTR_Base_3_sorted.bam"       "CTR_Base_3_sorted.bam.bai"  
+[19] "CTR_Base_4_sorted.bam"       "CTR_Base_4_sorted.bam.bai"  
+[21] "CTR_Base_5_sorted.bam"       "CTR_Base_5_sorted.bam.bai"  
+[23] "CTR_Base_6_sorted.bam"       "CTR_Base_6_sorted.bam.bai"  
+[25] "Homo_sapiens.GRCh38.100.gtf" "IPF_Apex_1_sorted.bam"      
+[27] "IPF_Apex_1_sorted.bam.bai"   "IPF_Apex_2_sorted.bam"      
+[29] "IPF_Apex_2_sorted.bam.bai"   "IPF_Apex_3_sorted.bam"      
+[31] "IPF_Apex_3_sorted.bam.bai"   "IPF_Apex_4_sorted.bam"      
+[33] "IPF_Apex_4_sorted.bam.bai"   "IPF_Apex_5_sorted.bam"      
+[35] "IPF_Apex_5_sorted.bam.bai"   "IPF_Apex_6_sorted.bam"      
+[37] "IPF_Apex_6_sorted.bam.bai"   "IPF_Base_1_sorted.bam"      
+[39] "IPF_Base_1_sorted.bam.bai"   "IPF_Base_2_sorted.bam"      
+[41] "IPF_Base_2_sorted.bam.bai"   "IPF_Base_3_sorted.bam"      
+[43] "IPF_Base_3_sorted.bam.bai"   "IPF_Base_4_sorted.bam"      
+[45] "IPF_Base_4_sorted.bam.bai"   "IPF_Base_5_sorted.bam"      
+[47] "IPF_Base_5_sorted.bam.bai"   "IPF_Base_6_sorted.bam"      
+[49] "IPF_Base_6_sorted.bam.bai"   "sample_Apex.csv"            
+[51] "sample_Base.csv"             "sample.csv"                 
+[53] "sample_CTR.csv"              "sample_IPF.csv"             
+> csvfile <- file.path(indir, "sample_Apex.csv")
+> sampleTable <- read.csv(csvfile, row.names = 1)
+> sampleTable
+           SampleName CellType      SampleID
+CTR_Apex_1 CTR_Apex_1      CTR CTR_Apex_009C
+CTR_Apex_2 CTR_Apex_2      CTR CTR_Apex_013A
+CTR_Apex_3 CTR_Apex_3      CTR CTR_Apex_024A
+CTR_Apex_4 CTR_Apex_4      CTR CTR_Apex_030C
+CTR_Apex_5 CTR_Apex_5      CTR CTR_Apex_052A
+CTR_Apex_6 CTR_Apex_6      CTR CTR_Apex_053A
+IPF_Apex_1 IPF_Apex_1      IPF IPF_Apex_018C
+IPF_Apex_2 IPF_Apex_2      IPF IPF_Apex_023A
+IPF_Apex_3 IPF_Apex_3      IPF IPF_Apex_027C
+IPF_Apex_4 IPF_Apex_4      IPF IPF_Apex_028B
+IPF_Apex_5 IPF_Apex_5      IPF IPF_Apex_029A
+IPF_Apex_6 IPF_Apex_6      IPF IPF_Apex_043C
+> filenames <- file.path(indir, paste0(sampleTable$SampleName,"_sorted.bam"))
+> file.exists(filenames)
+ [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+> library(Rsamtools)
+Loading required package: GenomeInfoDb
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: \u2018BiocGenerics\u2019
+
+The following objects are masked from \u2018package:parallel\u2019:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from \u2018package:stats\u2019:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from \u2018package:base\u2019:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+Loading required package: stats4
+
+Attaching package: \u2018S4Vectors\u2019
+
+The following object is masked from \u2018package:base\u2019:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomicRanges
+Loading required package: Biostrings
+Loading required package: XVector
+
+Attaching package: \u2018Biostrings\u2019
+
+The following object is masked from \u2018package:base\u2019:
+
+    strsplit
+
+> bamfiles <- BamFileList(filenames, yieldSize=2000000)
+> seqinfo(bamfiles[1])
+Seqinfo object with 194 sequences from an unspecified genome:
+  seqnames   seqlengths isCircular genome
+  1           248956422       <NA>   <NA>
+  10          133797422       <NA>   <NA>
+  11          135086622       <NA>   <NA>
+  12          133275309       <NA>   <NA>
+  13          114364328       <NA>   <NA>
+  ...               ...        ...    ...
+  KI270539.1        993       <NA>   <NA>
+  KI270385.1        990       <NA>   <NA>
+  KI270423.1        981       <NA>   <NA>
+  KI270392.1        971       <NA>   <NA>
+  KI270394.1        970       <NA>   <NA>
+> library(GenomicFeatures)
+Loading required package: AnnotationDbi
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+> gtffile <- file.path(indir,"Homo_sapiens.GRCh38.100.gtf")
+> txdb <- makeTxDbFromGFF(gtffile, format="gtf", circ_seqs=character())
+Import genomic features from the file as a GRanges object ... OK
+Prepare the 'metadata' data frame ... OK
+Make the TxDb object ... OK
+Warning message:
+In .get_cds_IDX(mcols0$type, mcols0$phase) :
+  The "phase" metadata column contains non-NA values for features of type
+  stop_codon. This information was ignored.
+> txdb
+TxDb object:
+# Db type: TxDb
+# Supporting package: GenomicFeatures
+# Data source: /data2/zhenjun/lung_apex_base/Samtools/sorted/Homo_sapiens.GRCh38.100.gtf
+# Organism: NA
+# Taxonomy ID: NA
+# miRBase build ID: NA
+# Genome: NA
+# transcript_nrow: 227954
+# exon_nrow: 747775
+# cds_nrow: 275213
+# Db created by: GenomicFeatures package from Bioconductor
+# Creation time: 2021-03-16 13:00:07 +0800 (Tue, 16 Mar 2021)
+# GenomicFeatures version at creation time: 1.38.0
+# RSQLite version at creation time: 2.1.2
+# DBSCHEMAVERSION: 1.2
+> ebg <- exonsBy(txdb, by="gene")
+> ebg
+GRangesList object of length 60683:
+$ENSG00000000003
+GRanges object with 20 ranges and 2 metadata columns:
+       seqnames              ranges strand |   exon_id       exon_name
+          <Rle>           <IRanges>  <Rle> | <integer>     <character>
+   [1]        X 100627108-100629986      - |    739975 ENSE00001459322
+   [2]        X 100627109-100629986      - |    739976 ENSE00003730948
+   [3]        X 100630759-100630866      - |    739977 ENSE00000868868
+   [4]        X 100632063-100632068      - |    739978 ENSE00003731560
+   [5]        X 100632485-100632568      - |    739979 ENSE00000401072
+   ...      ...                 ...    ... .       ...             ...
+  [16]        X 100635558-100635746      - |    739990 ENSE00003733424
+  [17]        X 100636191-100636689      - |    739991 ENSE00001886883
+  [18]        X 100636608-100636806      - |    739992 ENSE00001855382
+  [19]        X 100636793-100637104      - |    739993 ENSE00001863395
+  [20]        X 100639945-100639991      - |    739994 ENSE00001828996
+  -------
+  seqinfo: 47 sequences from an unspecified genome; no seqlengths
+
+...
+<60682 more elements>
+> library(GenomicAlignments)
+Loading required package: SummarizedExperiment
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: \u2018matrixStats\u2019
+
+The following objects are masked from \u2018package:Biobase\u2019:
+
+    anyMissing, rowMedians
+
+Loading required package: BiocParallel
+
+Attaching package: \u2018DelayedArray\u2019
+
+The following objects are masked from \u2018package:matrixStats\u2019:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from \u2018package:base\u2019:
+
+    aperm, apply, rowsum
+
+> library(BiocParallel)
+> register(SerialParam())
+> se <- summarizeOverlaps(features=ebg, reads=bamfiles, mode="Union", singleEnd=TRUE, ignore.strand=TRUE)
+> se
+class: RangedSummarizedExperiment 
+dim: 60683 12 
+metadata(0):
+assays(1): counts
+rownames(60683): ENSG00000000003 ENSG00000000005 ... ENSG00000288603
+  ENSG00000288604
+rowData names(0):
+colnames(12): CTR_Apex_1_sorted.bam CTR_Apex_2_sorted.bam ...
+  IPF_Apex_5_sorted.bam IPF_Apex_6_sorted.bam
+colData names(0):
+> dim(se)
+[1] 60683    12
+> assayNames(se)
+[1] "counts"
+> head(assay(se), 3)
+                CTR_Apex_1_sorted.bam CTR_Apex_2_sorted.bam
+ENSG00000000003                  1321                   804
+ENSG00000000005                     0                     0
+ENSG00000000419                  1076                  1311
+                CTR_Apex_3_sorted.bam CTR_Apex_4_sorted.bam
+ENSG00000000003                   847                   739
+ENSG00000000005                     0                     0
+ENSG00000000419                   938                  1084
+                CTR_Apex_5_sorted.bam CTR_Apex_6_sorted.bam
+ENSG00000000003                  1553                   944
+ENSG00000000005                     1                     0
+ENSG00000000419                  1277                  1214
+                IPF_Apex_1_sorted.bam IPF_Apex_2_sorted.bam
+ENSG00000000003                  1099                   519
+ENSG00000000005                     0                     0
+ENSG00000000419                  1181                  1022
+                IPF_Apex_3_sorted.bam IPF_Apex_4_sorted.bam
+ENSG00000000003                   695                   988
+ENSG00000000005                     0                     0
+ENSG00000000419                  1310                  1236
+                IPF_Apex_5_sorted.bam IPF_Apex_6_sorted.bam
+ENSG00000000003                   727                   954
+ENSG00000000005                     0                     0
+ENSG00000000419                  1240                  1392
+> setwd("/data2/zhenjun/lung_apex_base/Graph/Apex")
+> write.csv(assay(se), file = "rawcounts_Apex.csv")
+> colSums(assay(se))
+CTR_Apex_1_sorted.bam CTR_Apex_2_sorted.bam CTR_Apex_3_sorted.bam 
+             37360652              33290414              32413534 
+CTR_Apex_4_sorted.bam CTR_Apex_5_sorted.bam CTR_Apex_6_sorted.bam 
+             32244804              41933040              34916401 
+IPF_Apex_1_sorted.bam IPF_Apex_2_sorted.bam IPF_Apex_3_sorted.bam 
+             37561747              29848445              30195336 
+IPF_Apex_4_sorted.bam IPF_Apex_5_sorted.bam IPF_Apex_6_sorted.bam 
+             33194798              26265524              37972967 
+> rowRanges(se)
+GRangesList object of length 60683:
+$ENSG00000000003
+GRanges object with 20 ranges and 2 metadata columns:
+       seqnames              ranges strand |   exon_id       exon_name
+          <Rle>           <IRanges>  <Rle> | <integer>     <character>
+   [1]        X 100627108-100629986      - |    739975 ENSE00001459322
+   [2]        X 100627109-100629986      - |    739976 ENSE00003730948
+   [3]        X 100630759-100630866      - |    739977 ENSE00000868868
+   [4]        X 100632063-100632068      - |    739978 ENSE00003731560
+   [5]        X 100632485-100632568      - |    739979 ENSE00000401072
+   ...      ...                 ...    ... .       ...             ...
+  [16]        X 100635558-100635746      - |    739990 ENSE00003733424
+  [17]        X 100636191-100636689      - |    739991 ENSE00001886883
+  [18]        X 100636608-100636806      - |    739992 ENSE00001855382
+  [19]        X 100636793-100637104      - |    739993 ENSE00001863395
+  [20]        X 100639945-100639991      - |    739994 ENSE00001828996
+  -------
+  seqinfo: 47 sequences from an unspecified genome; no seqlengths
+
+...
+<60682 more elements>
+> str(metadata(rowRanges(se)))
+List of 1
+ $ genomeInfo:List of 15
+  ..$ Db type                                 : chr "TxDb"
+  ..$ Supporting package                      : chr "GenomicFeatures"
+  ..$ Data source                             : chr "/data2/zhenjun/lung_apex_base/Samtools/sorted/Homo_sapiens.GRCh38.100.gtf"
+  ..$ Organism                                : chr NA
+  ..$ Taxonomy ID                             : chr NA
+  ..$ miRBase build ID                        : chr NA
+  ..$ Genome                                  : chr NA
+  ..$ transcript_nrow                         : chr "227954"
+  ..$ exon_nrow                               : chr "747775"
+  ..$ cds_nrow                                : chr "275213"
+  ..$ Db created by                           : chr "GenomicFeatures package from Bioconductor"
+  ..$ Creation time                           : chr "2021-03-16 13:00:07 +0800 (Tue, 16 Mar 2021)"
+  ..$ GenomicFeatures version at creation time: chr "1.38.0"
+  ..$ RSQLite version at creation time        : chr "2.1.2"
+  ..$ DBSCHEMAVERSION                         : chr "1.2"
+> colData(se)
+DataFrame with 12 rows and 0 columns
+> colData(se) <- DataFrame(sampleTable)
+> colData(se)
+DataFrame with 12 rows and 3 columns
+           SampleName CellType      SampleID
+             <factor> <factor>      <factor>
+CTR_Apex_1 CTR_Apex_1      CTR CTR_Apex_009C
+CTR_Apex_2 CTR_Apex_2      CTR CTR_Apex_013A
+CTR_Apex_3 CTR_Apex_3      CTR CTR_Apex_024A
+CTR_Apex_4 CTR_Apex_4      CTR CTR_Apex_030C
+CTR_Apex_5 CTR_Apex_5      CTR CTR_Apex_052A
+...               ...      ...           ...
+IPF_Apex_2 IPF_Apex_2      IPF IPF_Apex_023A
+IPF_Apex_3 IPF_Apex_3      IPF IPF_Apex_027C
+IPF_Apex_4 IPF_Apex_4      IPF IPF_Apex_028B
+IPF_Apex_5 IPF_Apex_5      IPF IPF_Apex_029A
+IPF_Apex_6 IPF_Apex_6      IPF IPF_Apex_043C
+> round( colSums(assay(se)) / 1e6, 1 )
+CTR_Apex_1 CTR_Apex_2 CTR_Apex_3 CTR_Apex_4 CTR_Apex_5 CTR_Apex_6 IPF_Apex_1 
+      37.4       33.3       32.4       32.2       41.9       34.9       37.6 
+IPF_Apex_2 IPF_Apex_3 IPF_Apex_4 IPF_Apex_5 IPF_Apex_6 
+      29.8       30.2       33.2       26.3       38.0 
+> library(DESeq2)
+> dds <- DESeqDataSet(se, design = ~ CellType)
+> dds
+class: DESeqDataSet 
+dim: 60683 12 
+metadata(1): version
+assays(1): counts
+rownames(60683): ENSG00000000003 ENSG00000000005 ... ENSG00000288603
+  ENSG00000288604
+rowData names(0):
+colnames(12): CTR_Apex_1 CTR_Apex_2 ... IPF_Apex_5 IPF_Apex_6
+colData names(3): SampleName CellType SampleID
+> dds$CellType <- relevel(dds$CellType, ref = "CTR")
+> dds$CellType
+ [1] CTR CTR CTR CTR CTR CTR IPF IPF IPF IPF IPF IPF
+Levels: CTR IPF
+> nrow(dds)
+[1] 60683
+> dds <- dds[ rowSums(counts(dds)) > 1, ]
+> nrow(dds)
+[1] 35880
+> pdf("Apex count distribution boxplots.pdf")
+> librarySizes <- colSums(assay(dds))
+> barplot(librarySizes, names=names(librarySizes), las=2, main="Barplot of library sizes")
+> abline(lty=2)
+> dev.off()
+null device 
+          1 
+> logcounts <- log2(assay(dds) + 1)
+> CellTypeCol <- as.numeric(factor(sampleTable$CellType)) + 1
+> pdf("Apex log2 counts boxplots.pdf")
+> boxplot(logcounts, xlab="", ylab="Log2(Counts)", las=2, col=CellTypeCol)
+> abline(h=median(as.matrix(logcounts)), col="blue")
+> dev.off()
+null device 
+          1 
+> rld <- rlog(dds, blind = FALSE)
+> head(assay(rld), 3)
+                CTR_Apex_1 CTR_Apex_2 CTR_Apex_3 CTR_Apex_4 CTR_Apex_5
+ENSG00000000003  10.071100   9.788009   9.806685   9.621223  10.126870
+ENSG00000000419  10.003340  10.394995  10.038836  10.121512  10.065260
+ENSG00000000457   8.524829   8.469199   8.414922   8.611443   8.550153
+                CTR_Apex_6 IPF_Apex_1 IPF_Apex_2 IPF_Apex_3 IPF_Apex_4
+ENSG00000000003   9.757582   9.945972   9.395329   9.617842   9.942911
+ENSG00000000419  10.132786  10.146740  10.170316  10.361760  10.291171
+ENSG00000000457   8.371585   8.554429   8.664359   8.372519   8.450924
+                IPF_Apex_5 IPF_Apex_6
+ENSG00000000003   9.828105   9.702739
+ENSG00000000419  10.480925  10.199306
+ENSG00000000457   8.205836   8.305870
+> colData(rld)
+DataFrame with 12 rows and 4 columns
+           SampleName CellType      SampleID        sizeFactor
+             <factor> <factor>      <factor>         <numeric>
+CTR_Apex_1 CTR_Apex_1      CTR CTR_Apex_009C  1.12379765127993
+CTR_Apex_2 CTR_Apex_2      CTR CTR_Apex_013A 0.913315461454837
+CTR_Apex_3 CTR_Apex_3      CTR CTR_Apex_024A 0.943701081789196
+CTR_Apex_4 CTR_Apex_4      CTR CTR_Apex_030C 0.999987300720761
+CTR_Apex_5 CTR_Apex_5      CTR CTR_Apex_052A  1.24936307615297
+...               ...      ...           ...               ...
+IPF_Apex_2 IPF_Apex_2      IPF IPF_Apex_023A 0.896145782538937
+IPF_Apex_3 IPF_Apex_3      IPF IPF_Apex_027C 0.943876228426106
+IPF_Apex_4 IPF_Apex_4      IPF IPF_Apex_028B 0.956959309279853
+IPF_Apex_5 IPF_Apex_5      IPF IPF_Apex_029A  0.79222696996359
+IPF_Apex_6 IPF_Apex_6      IPF IPF_Apex_043C  1.18448603132921
+> pdf("Apex rlog counts boxplots.pdf")
+> boxplot(assay(rld), xlab="", ylab="rlog(Counts)", las=2, col=CellTypeCol)
+> abline(h=median(as.matrix(assay(rld))), col="blue")
+> dev.off()
+null device 
+          1 
+> sampleDists <- dist(t(assay(rld)))
+> sampleDists
+           CTR_Apex_1 CTR_Apex_2 CTR_Apex_3 CTR_Apex_4 CTR_Apex_5 CTR_Apex_6
+CTR_Apex_2   81.28989                                                       
+CTR_Apex_3   59.78949   62.63842                                            
+CTR_Apex_4   65.32207   83.18393   61.85305                                 
+CTR_Apex_5   59.96579   84.43761   57.09038   69.41777                      
+CTR_Apex_6   69.27416   63.83511   54.37061   58.33193   65.40439           
+IPF_Apex_1   51.34245   62.08303   50.21036   69.15600   60.53326   61.14389
+IPF_Apex_2   81.06968  106.11294   77.70452   66.12984   79.29510   85.00143
+IPF_Apex_3   71.25247   65.28051   61.45406   63.23635   72.01683   54.52555
+IPF_Apex_4   64.92523   49.27592   50.29725   71.75272   64.28272   55.91543
+IPF_Apex_5   73.70701   52.72075   62.02317   73.73760   75.83988   56.87505
+IPF_Apex_6   73.18011   65.62790   58.47771   58.25099   73.20866   53.55369
+           IPF_Apex_1 IPF_Apex_2 IPF_Apex_3 IPF_Apex_4 IPF_Apex_5
+CTR_Apex_2                                                       
+CTR_Apex_3                                                       
+CTR_Apex_4                                                       
+CTR_Apex_5                                                       
+CTR_Apex_6                                                       
+IPF_Apex_1                                                       
+IPF_Apex_2   83.34851                                            
+IPF_Apex_3   60.54455   87.69177                                 
+IPF_Apex_4   46.89202   88.04116   58.52125                      
+IPF_Apex_5   56.39870   94.31352   46.77122   49.62733           
+IPF_Apex_6   64.55282   86.24147   45.82411   59.95071   53.15409
+> library(pheatmap)
+> library(RColorBrewer)
+> pdf("Apex Heatmap of sample-to-sample distances using the rlog values.pdf")
+> sampleDistMatrix <- as.matrix( sampleDists )
+> rownames(sampleDistMatrix) <- paste( rld$SampleName, sep = " - " )
+> colnames(sampleDistMatrix) <- paste( rld$SampleName, sep = " - " )
+> colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+> pheatmap(sampleDistMatrix, clustering_distance_rows = sampleDists, clustering_distance_cols = sampleDists, col = colors)
+> dev.off()
+null device 
+          1 
+> library(ggplot2)
+> pcaData <- plotPCA(rld, intgroup = c("CellType", "SampleName"), returnData = TRUE)
+> pcaData
+                  PC1         PC2          group CellType SampleName       name
+CTR_Apex_1 -17.605718  -8.9717215 CTR:CTR_Apex_1      CTR CTR_Apex_1 CTR_Apex_1
+CTR_Apex_2   3.271469  16.1138826 CTR:CTR_Apex_2      CTR CTR_Apex_2 CTR_Apex_2
+CTR_Apex_3  -5.237048  13.0116731 CTR:CTR_Apex_3      CTR CTR_Apex_3 CTR_Apex_3
+CTR_Apex_4  11.309748  -1.6356593 CTR:CTR_Apex_4      CTR CTR_Apex_4 CTR_Apex_4
+CTR_Apex_5 -15.454171  -0.3249064 CTR:CTR_Apex_5      CTR CTR_Apex_5 CTR_Apex_5
+CTR_Apex_6   9.644440   5.4196303 CTR:CTR_Apex_6      CTR CTR_Apex_6 CTR_Apex_6
+IPF_Apex_1 -13.895505  -2.2137904 IPF:IPF_Apex_1      IPF IPF_Apex_1 IPF_Apex_1
+IPF_Apex_2  -4.550518 -10.0195099 IPF:IPF_Apex_2      IPF IPF_Apex_2 IPF_Apex_2
+IPF_Apex_3  13.088935 -11.4791436 IPF:IPF_Apex_3      IPF IPF_Apex_3 IPF_Apex_3
+IPF_Apex_4  -7.129574   6.8547026 IPF:IPF_Apex_4      IPF IPF_Apex_4 IPF_Apex_4
+IPF_Apex_5   7.044268  -5.8755515 IPF:IPF_Apex_5      IPF IPF_Apex_5 IPF_Apex_5
+IPF_Apex_6  19.513675  -0.8796061 IPF:IPF_Apex_6      IPF IPF_Apex_6 IPF_Apex_6
+> percentVar <- round(100 * attr(pcaData, "percentVar"))
+> pdf("Apex PCA plot using the rlog values with custom ggplot2 code.pdf")
+> ggplot(pcaData, aes(x = PC1, y = PC2, color = SampleName, shape = CellType)) + geom_point(size =3) + xlab(paste0("PC1: ", percentVar[1], "% variance")) + ylab(paste0("PC2: ", percentVar[2], "% variance")) + coord_fixed()
+> dev.off()
+null device 
+          1 
+> dds <- DESeq(dds)
+estimating size factors
+estimating dispersions
+gene-wise dispersion estimates
+mean-dispersion relationship
+final dispersion estimates
+fitting model and testing
+> res <- results(dds)
+> res
+log2 fold change (MLE): CellType IPF vs CTR 
+Wald test p-value: CellType IPF vs CTR 
+DataFrame with 35880 rows and 6 columns
+                         baseMean      log2FoldChange             lfcSE
+                        <numeric>           <numeric>         <numeric>
+ENSG00000000003  907.905446403206   -0.18106883481888 0.187995069004981
+ENSG00000000419  1188.58740284933   0.219504296549748 0.137201801255761
+ENSG00000000457  354.349178163903 -0.0868930902403797 0.140749798084698
+ENSG00000000460  256.897665748636  0.0070804550879446 0.329901442375192
+ENSG00000000938 0.560745289393179  -0.408752122863978  2.39444420224808
+...                           ...                 ...               ...
+ENSG00000288597  3.97548691988138   0.292314606815079 0.895503849973149
+ENSG00000288598  7.00668800197213  -0.688681607694863 0.479494266919659
+ENSG00000288600 0.225875201547054   -1.31854395042811  3.11142017260495
+ENSG00000288602 0.140708005209345    1.08387182602694  3.11653965008542
+ENSG00000288603 0.260134970623814   0.602980485461527  3.11653965008542
+                              stat            pvalue              padj
+                         <numeric>         <numeric>         <numeric>
+ENSG00000000003 -0.963157362462965 0.335468558625005 0.999941901468467
+ENSG00000000419   1.59986453924585 0.109628637495661 0.999941901468467
+ENSG00000000457 -0.617358542767433 0.536998260423613 0.999941901468467
+ENSG00000000460 0.0214623344383324 0.982876849300911 0.999941901468467
+ENSG00000000938 -0.170708560458503 0.864452931365785                NA
+...                            ...               ...               ...
+ENSG00000288597  0.326424734883991  0.74410302579531 0.999941901468467
+ENSG00000288598  -1.43626661507145 0.150926489940767 0.999941901468467
+ENSG00000288600 -0.423775599977611 0.671729474497034                NA
+ENSG00000288602  0.347780534734165  0.72800500923595                NA
+ENSG00000288603  0.193477559460859  0.84658497897024                NA
+> summary(res)
+
+out of 35880 with nonzero total read count
+adjusted p-value < 0.1
+LFC > 0 (up)       : 17, 0.047%
+LFC < 0 (down)     : 21, 0.059%
+outliers [1]       : 89, 0.25%
+low counts [2]     : 11130, 31%
+(mean count < 2)
+[1] see 'cooksCutoff' argument of ?results
+[2] see 'independentFiltering' argument of ?results
+
+> sum(res$padj < 0.1, na.rm=TRUE)
+[1] 38
+> res05 <- results(dds, alpha=0.05)
+> summary(res05)
+
+out of 35880 with nonzero total read count
+adjusted p-value < 0.05
+LFC > 0 (up)       : 5, 0.014%
+LFC < 0 (down)     : 6, 0.017%
+outliers [1]       : 89, 0.25%
+low counts [2]     : 12520, 35%
+(mean count < 2)
+[1] see 'cooksCutoff' argument of ?results
+[2] see 'independentFiltering' argument of ?results
+
+> sum(res05$padj < 0.05, na.rm=TRUE)
+[1] 11
+> library(AnnotationDbi)
+> library(org.Hs.eg.db)
+
+> columns(org.Hs.eg.db)
+ [1] "ACCNUM"       "ALIAS"        "ENSEMBL"      "ENSEMBLPROT"  "ENSEMBLTRANS"
+ [6] "ENTREZID"     "ENZYME"       "EVIDENCE"     "EVIDENCEALL"  "GENENAME"    
+[11] "GO"           "GOALL"        "IPI"          "MAP"          "OMIM"        
+[16] "ONTOLOGY"     "ONTOLOGYALL"  "PATH"         "PFAM"         "PMID"        
+[21] "PROSITE"      "REFSEQ"       "SYMBOL"       "UCSCKG"       "UNIGENE"     
+[26] "UNIPROT"     
+> res$symbol <- mapIds(org.Hs.eg.db, keys=row.names(res), column="SYMBOL", keytype="ENSEMBL", multiVals="first")
+'select()' returned 1:many mapping between keys and columns
+> res$entrez <- mapIds(org.Hs.eg.db, keys=row.names(res), column="ENTREZID", keytype="ENSEMBL", multiVals="first")
+'select()' returned 1:many mapping between keys and columns
+> res$genename <- mapIds(org.Hs.eg.db, keys=row.names(res), column="GENENAME", keytype="ENSEMBL", multiVals="first")
+'select()' returned 1:many mapping between keys and columns
+> resOrdered <- res[order(res$pvalue),]
+> head(resOrdered)
+log2 fold change (MLE): CellType IPF vs CTR 
+Wald test p-value: CellType IPF vs CTR 
+DataFrame with 6 rows and 9 columns
+                        baseMean     log2FoldChange             lfcSE
+                       <numeric>          <numeric>         <numeric>
+ENSG00000158321 623.507407362894 -0.557400223241006 0.101621931554267
+ENSG00000156687 9.06833193169079   6.19295619755525  1.24720806062948
+ENSG00000198910 61.7822870228258   1.69340790333402 0.348787236173475
+ENSG00000234880 12.6155141492149   -2.9286548147856 0.636189972268776
+ENSG00000260455 22.3497691419713  -1.48558647054165 0.334310486313509
+ENSG00000100626 338.089661955953 -0.981783621247267 0.221219661570302
+                             stat               pvalue                padj
+                        <numeric>            <numeric>           <numeric>
+ENSG00000158321 -5.48503865962583 4.13379005193566e-08 0.00101943396470785
+ENSG00000156687  4.96545555873782 6.85399876507407e-07 0.00845132317727458
+ENSG00000198910  4.85513151774791 1.20306869996712e-06 0.00988962573662969
+ENSG00000234880 -4.60342813065955 4.15592654757933e-06  0.0256223261474635
+ENSG00000260455 -4.44373279140427 8.84113979679052e-06  0.0373113130226992
+ENSG00000100626 -4.43804865389537 9.07781023219638e-06  0.0373113130226992
+                     symbol      entrez
+                <character> <character>
+ENSG00000158321       AUTS2       26053
+ENSG00000156687       UNC5D      137970
+ENSG00000198910       L1CAM        3897
+ENSG00000234880   LINC00163      727699
+ENSG00000260455          NA          NA
+ENSG00000100626     GALNT16       57452
+                                                                    genename
+                                                                 <character>
+ENSG00000158321 activator of transcription and developmental regulator AUTS2
+ENSG00000156687                                      unc-5 netrin receptor D
+ENSG00000198910                                    L1 cell adhesion molecule
+ENSG00000234880                   long intergenic non-protein coding RNA 163
+ENSG00000260455                                                           NA
+ENSG00000100626             polypeptide N-acetylgalactosaminyltransferase 16
+> resOrderedDF <- as.data.frame(resOrdered)
+> write.csv(resOrderedDF, file = "Apex_result_all.csv")
+> resSig <- subset(resOrdered, padj < 0.05 & abs(log2FoldChange) > 1)
+> write.csv(as.data.frame(resSig), file = "Apex_result_sig.csv")
+> library(genefilter)
+
+Attaching package: \u2018genefilter\u2019
+
+The following objects are masked from \u2018package:matrixStats\u2019:
+
+    rowSds, rowVars
+
+> topVarGenes <- head(order(rowVars(assay(rld)), decreasing = TRUE), 1000)
+> mat <- assay(rld)[ topVarGenes, ]
+> mat <- mat - rowMeans(mat)
+> anno <- as.data.frame(colData(rld)[, c("CellType", "SampleName")])
+> pdf("Apex Top 1000 variable genes across samples pheatmap.pdf")
+> pheatmap(mat, fontsize_row = 4, scale = "row", color = colorRampPalette(c("green","black","red"))(1000), annotation_col = anno)
+> dev.off()
+null device 
+          1 
+> matSig <- assay(rld[row.names(resSig)])
+> pdf("Apex significant genes across samples pheatmap.pdf")
+> pheatmap(matSig, fontsize_row = 4, scale = "row", color = colorRampPalette(rev(brewer.pal(11, "RdBu")))(255), annotation_col = anno)
+> dev.off()
+null device 
+          1 
+> library(apeglm)
+> pdf("Apex mean of normalizad counts.pdf")
+> plotMA(res, ylim=c(-5,5))
+> dev.off()
+null device 
+          1 
+> library(ggplot2)
+> library(ggrepel)
+> resdata <- as.data.frame(res)
+> resdata <- na.omit(resdata)
+> resdata$Threshold = as.factor(ifelse(resdata$padj < 0.05 & abs(resdata$log2FoldChange) > 1, ifelse(resdata$log2FoldChange> 1,'Up','Down'),'Nonsignificant'))
+> p1 <- ggplot(resdata, aes(x = log2FoldChange, y = -log10(padj), color = Threshold, label=symbol)) + geom_point(size = 1.5, alpha = 0.4) + labs(x = "log2FoldChange", y = "-log10(padj)") + geom_text_repel(data = subset(resdata, resdata$padj < 0.0001 & abs(resdata$log2FoldChange)>= 4), aes(label = symbol), size = 3, box.padding = unit(0.5, "lines"), point.padding = unit(0.8, "lines"), segment.color = "black", show.legend = FALSE )
+> p2 <- p1 + geom_vline(xintercept = c(-1, 1), color = 'black', linetype = 2, size = 0.5) +  geom_hline(yintercept = -log10(0.05), color = 'black', linetype = 2, size = 0.5)
+> pdf("Apex volcano plot.pdf")
+> p2
+> dev.off()
+null device 
+          1
